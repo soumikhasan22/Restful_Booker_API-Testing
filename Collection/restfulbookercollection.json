@@ -1,0 +1,833 @@
+{
+	"info": {
+		"_postman_id": "5b2dbcfd-1fb3-40d7-9e2c-ae70097e9bed",
+		"name": "restful-booker-api-testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40469012"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Generate_token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var response_body = pm.response.json();\r",
+									"\r",
+									"\r",
+									"if (response_body.token) {\r",
+									"    pm.test(\"Token generated successfully\");\r",
+									"    pm.environment.set(\"token\", response_body.token);\r",
+									"} \r",
+									"else if (response_body.reason === \"Bad credentials\") {\r",
+									"    pm.test(\"Token generation failed: Bad credentials\");\r",
+									"} \r",
+									"else {\r",
+									"    pm.test(\"Token generation failed: Unexpected response\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"admin\",\r\n    \"password\" : \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/auth",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Booking",
+			"item": [
+				{
+					"name": "see_allBookingIDS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var status_code = pm.response.code;\r",
+									"\r",
+									"if (status_code === 200) {\r",
+									"    pm.test(\"All booking IDs fetched successfully\");\r",
+									"} \r",
+									"else if (status_code === 404) {\r",
+									"    pm.test(\"Failed to fetch booking IDs: Endpoint not found\");\r",
+									"} \r",
+									"else if (status_code === 405) {\r",
+									"    pm.test(\"Failed to fetch booking IDs: Method not allowed\");\r",
+									"} \r",
+									"else {\r",
+									"    pm.test(\"Failed to fetch booking IDs: Unexpected status code \" + status_code);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/booking",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_booking",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstname=pm.variables.replaceIn(\"{{$randomFirstName}}\");\r",
+									"pm.environment.set(\"first_name\", firstname);\r",
+									"\r",
+									"var lastname=pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+									"pm.environment.set(\"last_name\", lastname);\r",
+									"\r",
+									"var totalprice=pm.variables.replaceIn(\"{{$randomInt}}\");\r",
+									"pm.environment.set(\"total_price\", totalprice);\r",
+									"\r",
+									"var depos=pm.variables.replaceIn(\"{{$randomBoolean}}\");\r",
+									"pm.environment.set(\"deposit_paid_status\", depos);\r",
+									"\r",
+									"const checkindate=require('moment');\r",
+									"const check_in_date=checkindate();\r",
+									"var checkInDate=check_in_date.format(\"YYYY-MM-DD\")\r",
+									"pm.environment.set(\"check_in_date\", checkInDate);\r",
+									"\r",
+									"const checkoutdate=require('moment');\r",
+									"const check_out_date=checkindate();\r",
+									"var checkoutDate=check_in_date.add(5,'d').format(\"YYYY-MM-DD\")\r",
+									"pm.environment.set(\"check_out_date\", checkoutDate);\r",
+									"\r",
+									"var need=[\"Breakfast\", \"Lunch\", \"Dinner\"]\r",
+									"var additionalneeds = need[Math.floor(Math.random() * need.length)];\r",
+									"pm.environment.set(\"additional_needs\", additionalneeds);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var status_code = pm.response.code;\r",
+									"\r",
+									"\r",
+									"if (status_code === 200) {\r",
+									"    var responseData = pm.response.json();\r",
+									"    pm.test(\"Booking completed successfully! Your Booking ID is: \" + responseData.bookingid);\r",
+									"    pm.environment.set(\"booking_id\", responseData.bookingid);\r",
+									"} \r",
+									"else if (status_code === 400) {\r",
+									"    pm.test(\"Booking failed: Invalid input provided\");\r",
+									"} \r",
+									"else if (status_code === 404) {\r",
+									"    pm.test(\"Booking failed: The requested endpoint was not found\");\r",
+									"} \r",
+									"else {\r",
+									"    pm.test(\"Booking failed: Unexpected status code received (\" + status_code + \")\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\" : \"{{first_name}}\",\r\n    \"lastname\" : \"{{last_name}}\",\r\n    \"totalprice\" : {{total_price}},\r\n    \"depositpaid\" : {{deposit_paid_status}},\r\n    \"bookingdates\" : {\r\n        \"checkin\" : \"{{check_in_date}}\",\r\n        \"checkout\" : \"{{check_out_date}}\"\r\n    },\r\n    \"additionalneeds\" : \"{{additional_needs}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/booking",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"booking"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bookingDetailsbyID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var status_code = pm.response.code;\r",
+									"\r",
+									"if (status_code === 200) {\r",
+									"    var responseData = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Booking first name in response matches the expected value: \" + pm.environment.get(\"first_name\"), function () {\r",
+									"        pm.expect(responseData.firstname).to.eql(pm.environment.get(\"first_name\"));\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking last name in response matches the expected value: \" + pm.environment.get(\"last_name\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"last_name\")).to.eql(responseData.lastname);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking total price in response matches the expected value: \" + pm.environment.get(\"total_price\"), function () {\r",
+									"        pm.expect(Number(pm.environment.get(\"total_price\"))).to.eql(responseData.totalprice);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking deposit status in response matches the expected value: \" + pm.environment.get(\"deposit_paid_status\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"deposit_paid_status\")).to.eql(responseData.depositpaid.toString());\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking check-in date in response matches the expected value: \" + pm.environment.get(\"check_in_date\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"check_in_date\")).to.eql(responseData.bookingdates.checkin);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking check-out date in response matches the expected value: \" + pm.environment.get(\"check_out_date\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"check_out_date\")).to.eql(responseData.bookingdates.checkout);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking additional needs in response match the expected value: \" + pm.environment.get(\"additional_needs\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"additional_needs\")).to.eql(responseData.additionalneeds);\r",
+									"    });\r",
+									"\r",
+									"} else if (status_code === 404) {\r",
+									"    pm.test(\"Booking not found.It maybe Deleted or Verify the booking ID or create a new booking.\")\r",
+									"    \r",
+									"} else if (status_code === 405) {\r",
+									"    pm.test(\"Request method not allowed. Verify the API endpoint and HTTP method.\");\r",
+									"} else {\r",
+									"    pm.test(\"Unexpected status code received: \" + status_code + \". Please investigate the API response.\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/booking/{{booking_id}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"booking",
+								"{{booking_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_booking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var status_Code = pm.response.code;\r",
+									"\r",
+									"\r",
+									"if (status_Code === 200) {\r",
+									"    var responseData=pm.response.json();\r",
+									"    pm.test(\"Booking updated successfully. Booking ID: \" + pm.environment.get(\"booking_id\"));\r",
+									"    pm.environment.set(\"first_name\", responseData.firstname);\r",
+									"    pm.environment.set(\"last_name\", responseData.lastname);\r",
+									"    pm.environment.set(\"total_price\", responseData.totalprice);\r",
+									"    pm.environment.set(\"deposit_paid_status\", responseData.depositpaid.toString());\r",
+									"    pm.environment.set(\"check_in_date\", responseData.bookingdates.checkin);\r",
+									"    pm.environment.set(\"check_out_date\", responseData.bookingdates.checkout);\r",
+									"    pm.environment.set(\"additional_needs\", responseData.additionalneeds);\r",
+									"   \r",
+									"  \r",
+									"} \r",
+									"else if (status_Code === 400) {\r",
+									"    pm.test(\"Update failed: Invalid input data provided.\");\r",
+									"} \r",
+									"else if (status_Code === 403) {\r",
+									"    pm.test(\"Update failed: Authorization token missing or invalid. Please generate a token.\");\r",
+									"} \r",
+									"else if (status_Code === 404) {\r",
+									"    pm.test(\"Update failed: Booking not found or endpoint does not exist.\");\r",
+									"} \r",
+									"else if (status_Code === 405) {\r",
+									"    pm.test(\"Update failed: HTTP method not allowed. Please check the request method.\");\r",
+									"} \r",
+									"else {\r",
+									"    pm.test(\"Update failed: Unexpected status code received (\" + status_Code + \").\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstname=pm.variables.replaceIn(\"{{$randomFirstName}}\");\r",
+									"pm.environment.set(\"updated_first_name\", firstname);\r",
+									"\r",
+									"var lastname=pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+									"pm.environment.set(\"updated_last_name\", lastname);\r",
+									"\r",
+									"var totalprice=pm.variables.replaceIn(\"{{$randomInt}}\");\r",
+									"pm.environment.set(\"updated_total_price\", totalprice);\r",
+									"\r",
+									"var depos=pm.variables.replaceIn(\"{{$randomBoolean}}\");\r",
+									"pm.environment.set(\"updated_deposit_paid_status\", depos);\r",
+									"\r",
+									"const checkindate=require('moment');\r",
+									"const check_in_date=checkindate();\r",
+									"var checkInDate=check_in_date.format(\"YYYY-MM-DD\")\r",
+									"pm.environment.set(\"updated_check_in_date\", checkInDate);\r",
+									"\r",
+									"const checkoutdate=require('moment');\r",
+									"const check_out_date=checkindate();\r",
+									"var checkoutDate=check_in_date.add(5,'d').format(\"YYYY-MM-DD\")\r",
+									"pm.environment.set(\"updated_check_out_date\", checkoutDate);\r",
+									"\r",
+									"var need=[\"Breakfast\", \"Lunch\", \"Dinner\"]\r",
+									"var additionalneeds = need[Math.floor(Math.random() * need.length)];\r",
+									"pm.environment.set(\"updated_additional_needs\", additionalneeds);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Cookie",
+								"value": "token={{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\" : \"{{updated_first_name}}\",\r\n    \"lastname\" : \"{{updated_last_name}}\",\r\n    \"totalprice\" : {{updated_total_price}},\r\n    \"depositpaid\" : {{updated_deposit_paid_status}},\r\n    \"bookingdates\" : {\r\n        \"checkin\" : \"{{updated_check_in_date}}\",\r\n        \"checkout\" : \"{{updated_check_out_date}}\"\r\n    },\r\n    \"additionalneeds\" : \"{{updated_additional_needs}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/booking/{{booking_id}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"booking",
+								"{{booking_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bookingDetailsbyIDAfterUpdate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var status_code = pm.response.code;\r",
+									"\r",
+									"if (status_code === 200) {\r",
+									"    var responseData = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Booking first name in response matches the expected value: \" + pm.environment.get(\"first_name\"), function () {\r",
+									"        pm.expect(responseData.firstname).to.eql(pm.environment.get(\"first_name\"));\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking last name in response matches the expected value: \" + pm.environment.get(\"last_name\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"last_name\")).to.eql(responseData.lastname);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking total price in response matches the expected value: \" + pm.environment.get(\"total_price\"), function () {\r",
+									"        pm.expect(Number(pm.environment.get(\"total_price\"))).to.eql(responseData.totalprice);\r",
+									"    });\r",
+									"\r",
+									"   pm.test(\"Booking deposit status in response matches the expected value: \" + pm.environment.get(\"deposit_paid_status\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"deposit_paid_status\")).to.eql(responseData.depositpaid.toString());\r",
+									"    });\r",
+									"\r",
+									"\r",
+									"\r",
+									"    pm.test(\"Booking check-in date in response matches the expected value: \" + pm.environment.get(\"check_in_date\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"check_in_date\")).to.eql(responseData.bookingdates.checkin);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking check-out date in response matches the expected value: \" + pm.environment.get(\"check_out_date\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"check_out_date\")).to.eql(responseData.bookingdates.checkout);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking additional needs in response match the expected value: \" + pm.environment.get(\"additional_needs\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"additional_needs\")).to.eql(responseData.additionalneeds);\r",
+									"    });\r",
+									"\r",
+									"} else if (status_code === 404) {\r",
+									"    pm.test(\"Booking not found.It maybe Deleted or Verify the booking ID or create a new booking.\")\r",
+									"    \r",
+									"} else if (status_code === 405) {\r",
+									"    pm.test(\"Request method not allowed. Verify the API endpoint and HTTP method.\");\r",
+									"} else {\r",
+									"    pm.test(\"Unexpected status code received: \" + status_code + \". Please investigate the API response.\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/booking/{{booking_id}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"booking",
+								"{{booking_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "partial_updateBooking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var status_Code = pm.response.code;\r",
+									"\r",
+									"\r",
+									"if (status_Code === 200) {\r",
+									"    var responseData=pm.response.json();\r",
+									"    pm.test(\"Partial Booking updated successfully. Booking ID: \" + pm.environment.get(\"booking_id\"));\r",
+									"\r",
+									"     pm.environment.set(\"first_name\", responseData.firstname);\r",
+									"    pm.environment.set(\"last_name\", responseData.lastname);\r",
+									"    pm.environment.set(\"total_price\", responseData.totalprice);\r",
+									"    pm.environment.set(\"deposit_paid_status\", responseData.depositpaid.toString());\r",
+									"    pm.environment.set(\"check_in_date\", responseData.bookingdates.checkin);\r",
+									"    pm.environment.set(\"check_out_date\", responseData.bookingdates.checkout);\r",
+									"    pm.environment.set(\"additional_needs\", responseData.additionalneeds);\r",
+									"   \r",
+									"  \r",
+									"} \r",
+									"else if (status_Code === 400) {\r",
+									"    pm.test(\"Update failed: Invalid input data provided.\");\r",
+									"} \r",
+									"else if (status_Code === 403) {\r",
+									"    pm.test(\"Update failed: Authorization token missing or invalid. Please generate a token.\");\r",
+									"} \r",
+									"else if (status_Code === 404) {\r",
+									"    pm.test(\"Update failed: Booking not found or endpoint does not exist.\");\r",
+									"} \r",
+									"else if (status_Code === 405) {\r",
+									"    pm.test(\"Update failed: HTTP method not allowed. Please check the request method.\");\r",
+									"} \r",
+									"else {\r",
+									"    pm.test(\"Update failed: Unexpected status code received (\" + status_Code + \").\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var firstname=pm.variables.replaceIn(\"{{$randomFirstName}}\");\r",
+									"pm.environment.set(\"partial_first_name\", firstname);\r",
+									"\r",
+									"var lastname=pm.variables.replaceIn(\"{{$randomLastName}}\");\r",
+									"pm.environment.set(\"partial_last_name\", lastname);\r",
+									"\r",
+									"var totalprice=pm.variables.replaceIn(\"{{$randomInt}}\");\r",
+									"pm.environment.set(\"partial_total_price\", totalprice);\r",
+									"\r",
+									"var depos=pm.variables.replaceIn(\"{{$randomBoolean}}\");\r",
+									"pm.environment.set(\"partial_deposit_paid_status\", depos);\r",
+									"\r",
+									"const checkindate=require('moment');\r",
+									"const check_in_date=checkindate();\r",
+									"var checkInDate=check_in_date.format(\"YYYY-MM-DD\")\r",
+									"pm.environment.set(\"partial_check_in_date\", checkInDate);\r",
+									"\r",
+									"const checkoutdate=require('moment');\r",
+									"const check_out_date=checkindate();\r",
+									"var checkoutDate=check_in_date.add(5,'d').format(\"YYYY-MM-DD\")\r",
+									"pm.environment.set(\"partial_check_out_date\", checkoutDate);\r",
+									"\r",
+									"var need=[\"Breakfast\", \"Lunch\", \"Dinner\"]\r",
+									"var additionalneeds = need[Math.floor(Math.random() * need.length)];\r",
+									"pm.environment.set(\"partial_additional_needs\", additionalneeds);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Cookie",
+								"value": "token={{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\" : \"{{partial_first_name}}\",\r\n    \"lastname\" : \"{{partial_last_name}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/booking/{{booking_id}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"booking",
+								"{{booking_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bookingDetailsbyIDAfterPartialUpdate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var status_code = pm.response.code;\r",
+									"\r",
+									"if (status_code === 200) {\r",
+									"    var responseData = pm.response.json();\r",
+									"\r",
+									"    pm.test(\"Booking first name in response matches the expected value: \" + pm.environment.get(\"first_name\"), function () {\r",
+									"        pm.expect(responseData.firstname).to.eql(pm.environment.get(\"first_name\"));\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking last name in response matches the expected value: \" + pm.environment.get(\"last_name\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"last_name\")).to.eql(responseData.lastname);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking total price in response matches the expected value: \" + pm.environment.get(\"total_price\"), function () {\r",
+									"        pm.expect(Number(pm.environment.get(\"total_price\"))).to.eql(responseData.totalprice);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking deposit status in response matches the expected value: \" + pm.environment.get(\"deposit_paid_status\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"deposit_paid_status\")).to.eql(responseData.depositpaid.toString());\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking check-in date in response matches the expected value: \" + pm.environment.get(\"check_in_date\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"check_in_date\")).to.eql(responseData.bookingdates.checkin);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking check-out date in response matches the expected value: \" + pm.environment.get(\"check_out_date\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"check_out_date\")).to.eql(responseData.bookingdates.checkout);\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Booking additional needs in response match the expected value: \" + pm.environment.get(\"additional_needs\"), function () {\r",
+									"        pm.expect(pm.environment.get(\"additional_needs\")).to.eql(responseData.additionalneeds);\r",
+									"    });\r",
+									"\r",
+									"} else if (status_code === 404) {\r",
+									"    pm.test(\"Booking not found.It maybe Deleted or Verify the booking ID or create a new booking.\")\r",
+									"    \r",
+									"} else if (status_code === 405) {\r",
+									"    pm.test(\"Request method not allowed. Verify the API endpoint and HTTP method.\");\r",
+									"} else {\r",
+									"    pm.test(\"Unexpected status code received: \" + status_code + \". Please investigate the API response.\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/booking/{{booking_id}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"booking",
+								"{{booking_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_booking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Get the response status code\r",
+									"var status = pm.response.code;\r",
+									"var bookingId = pm.environment.get(\"booking_id\") || \"Null\";\r",
+									"\r",
+									"\r",
+									"if (status === 201) {\r",
+									"    pm.test(\"Booking deleted successfully. Booking ID: \" + bookingId);\r",
+									"    pm.environment.unset(\"booking_id\");\r",
+									"} \r",
+									"else if (status === 405) {\r",
+									"    pm.test(\"Booking deletion failed: The booking has already been deleted or the request method is not allowed. Booking ID: \" + bookingId);\r",
+									"} \r",
+									"else if (status === 403) {\r",
+									"    pm.test(\"Booking deletion failed: Authorization token missing or invalid. Please generate a valid token.\");\r",
+									"} \r",
+									"\r",
+									"else if (status === 404) {\r",
+									"    pm.test(\"Booking deletion failed: Booking not found or endpoint does not exist. Booking ID: \");\r",
+									"} \r",
+									"else {\r",
+									"    pm.test(\"Booking deletion failed: Unexpected status code received (\" + status + \").\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "token={{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseurl}}/booking/{{booking_id}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"booking",
+								"{{booking_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ping",
+			"item": [
+				{
+					"name": "HealthCheck",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var status = pm.response.code;\r",
+									"\r",
+									"\r",
+									"\r",
+									"if (status === 201) {\r",
+									"    pm.test(\"HealthCheck ping successfully created\")\r",
+									"} \r",
+									"\r",
+									"\r",
+									"else if (status === 404) {\r",
+									"    pm.test(\"Invalid Endpoint does not exist. \");\r",
+									"} \r",
+									"else {\r",
+									"    pm.test(\"Booking deletion failed: Unexpected status code received (\" + status + \").\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseurl}}/ping",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"ping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
