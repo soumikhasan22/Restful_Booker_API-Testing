@@ -1,149 +1,156 @@
 # 🧩 Restful Booker API Testing Project
 
-This repository contains a complete **API testing project** for the RESTful **Booker API** using **Postman** and **Newman**. It demonstrates automated API testing, dynamic data generation, environment management, and HTML reporting for professional-level test documentation.
+This repository contains a complete **API testing project** for the RESTful **Booker API** using **Postman** and **Newman**. The project demonstrates automated API testing, dynamic data management, environment handling, and HTML reporting.
 
 ## 📋 Project Overview
 
-The Booker API project showcases professional **API testing skills**, including:
+The goal of this project is to validate the CRUD functionality of the Restful Booker API and ensure all endpoints work as expected. Testing was performed using Postman collections and automated with Newman CLI to generate HTML reports.
 
-- Designing and executing CRUD operations (Create, Read, Update, Partial Update, Delete)
-- Using **environment variables** for dynamic and reusable test data
-- Writing **pre-request scripts** to generate random data (first name, last name, total price, deposit status, booking dates, additional needs)
-- Creating **test scripts** for validation of response data, status codes, and business logic
-- Automating tests with **Newman CLI** and generating HTML reports
-- Handling multiple HTTP response codes such as `200`, `400`, `401`, `403`, `404`, `405`, `500` and unexpected codes
+Key skills demonstrated:
+
+- CRUD operations (Create, Read, Update, Partial Update, Delete)
+- Environment variable usage for dynamic test data
+- Pre-request scripts for random data generation
+- Test scripts for response validation, status codes, and business logic
+- Automated execution and HTML reporting with Newman
+- Handling multiple HTTP response codes (`200`, `400`, `401`, `403`, `404`, `405`, `500`)
 
 ## 🧠 Test Scope
 
-### 🔹 Covered Endpoints
+### Covered Endpoints
 
-#### 1. Authentication
+**1. Authentication**
 | Endpoint | Method | Description |
-|-----------|---------|-------------|
-| `/auth` | POST | Generates an authentication token using valid credentials. The token is saved as `{{token}}` for subsequent requests |
+|----------|--------|-------------|
+| `/auth` | POST | Generates an authentication token using valid credentials and stores it as `{{token}}`. |
 
-**Test Includes:**
-- Valid token creation validation
+Tests include:
+
+- Valid token creation
 - Invalid credentials handling
-- Token environment variable storage
+- Environment variable storage
 
-#### 2. View All Bookings
+**2. View All Bookings**
 | Endpoint | Method | Description |
-|-----------|---------|-------------|
-| `/booking` | GET | Retrieves all existing booking IDs from the server |
+|----------|--------|-------------|
+| `/booking` | GET | Retrieves all existing booking IDs. |
 
-**Test Includes:**
-- Verifies successful 200 OK response
-- Ensures returned data structure is valid
-- Handles 404 or 405 responses gracefully
+Tests include:
 
-#### 3. Create Booking
+- Successful 200 OK response
+- Valid data structure
+- Graceful handling of 404/405 responses
+
+**3. Create Booking**
 | Endpoint | Method | Description |
-|-----------|---------|-------------|
-| `/booking` | POST | Creates a new booking using dynamically generated data |
+|----------|--------|-------------|
+| `/booking` | POST | Creates a new booking using dynamic data. |
 
-**Pre-Request Script:**
-- Randomizes values for name, total price, and booking dates using `{{$randomFirstName}}`, `{{$randomLastName}}`, and `moment.js`
-- Stores data as environment variables for later verification
+Pre-request script:
 
-**Test Includes:**
-- Confirms booking creation success and saves `booking_id`
-- Validates all booking field values against expected environment data
-- Handles 400 (Invalid Input), 404 (Endpoint Not Found), and unexpected status codes
+- Randomizes name, total price, and booking dates
+- Stores values as environment variables for later verification
 
-#### 4. Get Booking by ID
+Tests include:
+
+- Booking creation success
+- Field validation against environment variables
+- Handling 400, 404, and unexpected status codes
+
+**4. Get Booking by ID**
 | Endpoint | Method | Description |
-|-----------|---------|-------------|
-| `/booking/{{booking_id}}` | GET | Retrieves booking details for the specified `booking_id` |
+|----------|--------|-------------|
+| `/booking/{{booking_id}}` | GET | Retrieves booking details for a specific ID. |
 
-**Test Includes:**
-- Confirms booking details match expected data
-- Verifies correct response structure and types
+Tests include:
+
+- Confirms booking data matches expected values
+- Validates response structure and types
 - Handles invalid or non-existent IDs
 
-#### 5. Update Booking (Full Update)
+**5. Update Booking (Full Update)**
 | Endpoint | Method | Description |
-|-----------|---------|-------------|
-| `/booking/{{booking_id}}` | PUT | Performs a full update on an existing booking. Requires valid token authentication |
+|----------|--------|-------------|
+| `/booking/{{booking_id}}` | PUT | Updates an existing booking fully; requires token. |
 
-**Test Includes:**
-- Confirms successful update (200 OK)
-- Verifies all updated fields in response
-- Updates environment variables accordingly
-- Handles 400, 401, 403, 404, 405 error codes
+Tests include:
 
-#### 6. Partial Update Booking
+- Successful update (200 OK)
+- Validation of all updated fields
+- Updates environment variables
+- Handles 400, 401, 403, 404, 405 errors
+
+**6. Partial Update Booking**
 | Endpoint | Method | Description |
-|-----------|---------|-------------|
-| `/booking/{{booking_id}}` | PATCH | Partially updates selected fields (e.g., first name, last name). Requires authentication |
+|----------|--------|-------------|
+| `/booking/{{booking_id}}` | PATCH | Updates selected fields; requires token. |
 
-**Test Includes:**
-- Validates partial update success and correct field modification
+Tests include:
+
+- Validates partial updates
 - Ensures non-updated fields remain unchanged
-- Handles invalid token or missing authorization cases
+- Handles invalid/missing token scenarios
 
-#### 7. Delete Booking
+**7. Delete Booking**
 | Endpoint | Method | Description |
-|-----------|---------|-------------|
-| `/booking/{{booking_id}}` | DELETE | Deletes an existing booking using the stored booking ID. Requires authentication |
+|----------|--------|-------------|
+| `/booking/{{booking_id}}` | DELETE | Deletes a booking; requires token. |
 
-**Test Includes:**
-- Confirms booking deletion (status 201 or 200 depending on API)
-- Verifies subsequent GET request returns “Not Found”
-- Handles invalid token, missing token, or non-existent booking ID
+Tests include:
 
-#### 8. Health Check
+- Confirms deletion success
+- Subsequent GET returns “Not Found”
+- Handles invalid/missing token or non-existent ID
+
+**8. Health Check**
 | Endpoint | Method | Description |
-|-----------|---------|-------------|
-| `/ping` | GET | Validates if the RESTful Booker API is up and responding |
+|----------|--------|-------------|
+| `/ping` | GET | Checks if API is up and responding. |
 
-**Test Includes:**
-- Confirms a `201` response for successful health check
-- Returns a descriptive message for 404 (invalid endpoint)
-- Displays custom message for any unexpected status code
+Tests include:
+
+- Confirms 201 response for successful health check
+- Returns descriptive message for invalid endpoints
+- Handles unexpected status codes
 
 ## 📊 HTML Report
 
-After running the tests with Newman, a detailed HTML report is generated in the `/Report/` directory.  
-The report includes:
-- Test execution results (passed/failed)
-- Response times
-- Assertions summary
-- Error logs (if any)
+- Generated by running Newman CLI
+- Shows test execution results, response times, assertion summary, and error logs
 
-### 🔹 Key Testing Areas
+### Key Testing Areas
 
-- ✅ Request & Response validation
-- ✅ Status code verification (`200`, `400`, `403`, `404`, `405`)
-- ✅ Dynamic data generation using environment variables
-- ✅ Pre-request scripts for random data
-- ✅ Test scripts/assertions for data & business logic
-- ✅ Automated HTML reporting with Newman
+- Request & Response validation
+- Status code verification (`200`, `400`, `403`, `404`, `405`)
+- Dynamic data generation using environment variables
+- Pre-request scripts for random data
+- Test scripts for business logic
+- Automated HTML reporting with Newman
 
 ## 📂 Folder Structure
 
 | Folder / File | Description |
 |---------------|-------------|
-| `Collection/restfulbookercollection.json` | Postman collection containing all API requests |
+| `Collection/restfulbookercollection.json` | Postman collection with all API requests |
 | `Environment/test_booking.postman_environment.json` | Postman environment file with variables |
 | `Report/restful-booker-api-testing-2025-11-05-18-45-02-920-0.html` | Newman HTML test execution report |
 | `README.md` | Project documentation |
 
 ## 🧪 Test Deliverables
 
-- ✅ Postman Collection
-- ✅ Postman Environment File
-- ✅ Newman HTML Report
-- ✅ Automated Test Scripts (Pre-request & Test Scripts)
+- Postman Collection  
+- Postman Environment File  
+- Newman HTML Report  
+- Automated Test Scripts (Pre-request & Test Scripts)
 
 ## 📈 Key Highlights
 
-- Designed and automated **CRUD operations** with Postman
-- Generated dynamic test data (names, prices, booking dates, additional needs)
-- Verified responses with **assertions** on data, status codes, and logic
-- Executed automated tests using **Newman CLI**
-- Generated **HTML reports** for professional visualization of test results
-- Handled multiple HTTP response codes and error scenarios
+- Designed and automated CRUD operations
+- Generated dynamic test data (names, prices, dates, additional needs)
+- Verified responses using assertions
+- Executed tests with Newman CLI
+- Generated professional HTML reports
+- Handled multiple HTTP response codes and errors
 
 ## 👤 Author / Contact
 
