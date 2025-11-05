@@ -2,8 +2,6 @@
 
 This repository contains a complete **API testing project** for the RESTful **Booker API** using **Postman** and **Newman**. It demonstrates automated API testing, dynamic data generation, environment management, and HTML reporting for professional-level test documentation.
 
-
-
 ## 📋 Project Overview
 
 The Booker API project showcases professional **API testing skills**, including:
@@ -13,8 +11,7 @@ The Booker API project showcases professional **API testing skills**, including:
 - Writing **pre-request scripts** to generate random data (first name, last name, total price, deposit status, booking dates, additional needs).  
 - Creating **test scripts** for validation of response data, status codes, and business logic.  
 - Automating tests with **Newman CLI** and generating HTML reports to visualize results.  
-- Handling multiple HTTP response codes such as `200`, `400`,`401` `403`, `404`, `405`,`500` and unexpected codes.
----
+- Handling multiple HTTP response codes such as `200`, `400`,`401`, `403`, `404`, `405`,`500` and unexpected codes.
 
 ## 🧠 Test Scope
 
@@ -30,8 +27,6 @@ The Booker API project showcases professional **API testing skills**, including:
 - Invalid credentials handling.  
 - Token environment variable storage.
 
----
-
 #### **2. View All Bookings**
 | Endpoint | Method | Description |
 |-----------|---------|-------------|
@@ -41,8 +36,6 @@ The Booker API project showcases professional **API testing skills**, including:
 - Verifies successful 200 OK response.  
 - Ensures returned data structure is valid.  
 - Handles 404 or 405 responses gracefully.
-
----
 
 #### **3. Create Booking**
 | Endpoint | Method | Description |
@@ -58,8 +51,6 @@ The Booker API project showcases professional **API testing skills**, including:
 - Validates all booking field values against expected environment data.  
 - Handles 400 (Invalid Input), 404 (Endpoint Not Found), and unexpected status codes.
 
----
-
 #### **4. Get Booking by ID**
 | Endpoint | Method | Description |
 |-----------|---------|-------------|
@@ -69,8 +60,6 @@ The Booker API project showcases professional **API testing skills**, including:
 - Confirms booking details match expected data.  
 - Verifies correct response structure and types.  
 - Handles invalid or non-existent IDs.
-
----
 
 #### **5. Update Booking (Full Update)**
 | Endpoint | Method | Description |
@@ -83,8 +72,6 @@ The Booker API project showcases professional **API testing skills**, including:
 - Updates environment variables accordingly.  
 - Handles 400,401, 403, 404,405 error codes.
 
----
-
 #### **6. Partial Update Booking**
 | Endpoint | Method | Description |
 |-----------|---------|-------------|
@@ -94,8 +81,6 @@ The Booker API project showcases professional **API testing skills**, including:
 - Validates partial update success and correct field modification.  
 - Ensures non-updated fields remain unchanged.  
 - Handles invalid token or missing authorization cases.
-
----
 
 #### **7. Delete Booking**
 | Endpoint | Method | Description |
@@ -107,8 +92,6 @@ The Booker API project showcases professional **API testing skills**, including:
 - Verifies subsequent GET request returns “Not Found”.  
 - Handles invalid token, missing token, or non-existent booking ID.
 
----
-
 #### **8. Health Check**
 | Endpoint | Method | Description |
 |-----------|---------|-------------|
@@ -119,14 +102,13 @@ The Booker API project showcases professional **API testing skills**, including:
 - Returns a descriptive message for 404 (invalid endpoint).  
 - Displays custom message for any unexpected status code.
 
----
-
 ## 📊 HTML Report
+
 After running the tests with Newman, a detailed HTML report is generated in the `/Report/` directory.  
 The report includes:
-- Test execution results (passed/failed)
-- Response times
-- Assertions summary
+- Test execution results (passed/failed)  
+- Response times  
+- Assertions summary  
 - Error logs (if any)
 
 ### 🔹 Key Testing Areas
@@ -136,9 +118,7 @@ The report includes:
 - ✅ Dynamic data generation using environment variables  
 - ✅ Pre-request scripts for random data  
 - ✅ Test scripts/assertions for data & business logic  
-- ✅ Automated HTML reporting with Newman  
-
----
+- ✅ Automated HTML reporting with Newman
 
 ## 📂 Folder Structure
 
@@ -149,16 +129,12 @@ The report includes:
 | `Report/restful-booker-api-testing-2025-11-05-18-45-02-920-0.html` | Newman HTML test execution report |
 | `README.md` | Project documentation |
 
----
-
 ## 🧪 Test Deliverables
 
 - ✅ Postman Collection  
 - ✅ Postman Environment File  
 - ✅ Newman HTML Report  
-- ✅ Automated Test Scripts (Pre-request & Test Scripts)  
-
----
+- ✅ Automated Test Scripts (Pre-request & Test Scripts)
 
 ## 📈 Key Highlights
 
@@ -167,15 +143,10 @@ The report includes:
 - Verified responses with **assertions** on data, status codes, and logic  
 - Executed automated tests using **Newman CLI**  
 - Generated **HTML reports** for professional visualization of test results  
-- Handled multiple HTTP response codes and error scenarios  
+- Handled multiple HTTP response codes and error scenarios
 
----
-👤 Author / Contact
+## 👤 Author / Contact
 
-A.B.M. Mahmudul Hasan (Soumik)
-
-📧 Email: soumikhasan000@gmail.com
-
-🔗 LinkedIn: https://www.linkedin.com/in/a-b-m-mahmudul-hasan-37907133b/
-
-
+**A.B.M. Mahmudul Hasan (Soumik)**  
+📧 Email: [soumikhasan000@gmail.com](mailto:soumikhasan000@gmail.com)  
+🔗 LinkedIn: [https://www.linkedin.com/in/a-b-m-mahmudul-hasan-37907133b/](https://www.linkedin.com/in/a-b-m-mahmudul-hasan-37907133b/)
