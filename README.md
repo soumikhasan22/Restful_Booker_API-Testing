@@ -1,5 +1,4 @@
 # 🧩 Restful Booker API Testing Project
-
 This repository contains a complete **API testing project** for the RESTful **Booker API** using **Postman** and **Newman**. It demonstrates automated API testing, dynamic data generation, environment management, and HTML reporting for professional-level test documentation.
 
 ## 📋 Project Overview
