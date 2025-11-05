@@ -2,7 +2,7 @@
 
 This repository contains a complete **API testing project** for the RESTful **Booker API** using **Postman** and **Newman**. It demonstrates automated API testing, dynamic data generation, environment management, and HTML reporting for professional-level test documentation.
 
----
+
 
 ## 📋 Project Overview
 
@@ -81,7 +81,7 @@ The Booker API project showcases professional **API testing skills**, including:
 - Confirms successful update (200 OK).  
 - Verifies all updated fields in response.  
 - Updates environment variables accordingly.  
-- Handles 400, 403, 404, and 405 error codes.
+- Handles 400,401, 403, 404,405 error codes.
 
 ---
 
@@ -173,8 +173,9 @@ The report includes:
 👤 Author / Contact
 
 A.B.M. Mahmudul Hasan (Soumik)
+
 📧 Email: soumikhasan000@gmail.com
+
 🔗 LinkedIn: https://www.linkedin.com/in/a-b-m-mahmudul-hasan-37907133b/
 
-```bash
-git clone https://github.com/soumikhasan22/Restful_Booker_API-Testing.git
+
