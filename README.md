@@ -154,6 +154,6 @@ Tests include:
 
 ## 👤 Author / Contact
 
-**A.B.M. Mahmudul Hasan (Soumik)**  
-📧 Email: [soumikhasan000@gmail.com](mailto:soumikhasan000@gmail.com)  
-🔗 LinkedIn: [https://www.linkedin.com/in/a-b-m-mahmudul-hasan-37907133b/](https://www.linkedin.com/in/a-b-m-mahmudul-hasan-37907133b/)
+A.B.M. Mahmudul Hasan (Soumik)  
+📧 Email: soumikhasan000@gmail.com  
+🔗 LinkedIn: [www.linkedin.com/in/a-b-m-mahmudul-hasan-soumik-37907133b](https://www.linkedin.com/in/a-b-m-mahmudul-hasan-soumik-37907133b)
